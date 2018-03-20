@@ -1,3 +1,4 @@
+//Dentro del Objeto partida se han creado los campos que guardara la hora que juega el sorteo y la hora a la que puede jugar el proximo sorteo. Tambien se ha creado un flag para saber si es la primera vez que juega o no, esta inicializada a true y la primera vez que juegue se cambiara su valor a false.
 var objPartida = {
     iniciada: false,
     saldo: 3000,
@@ -7,7 +8,6 @@ var objPartida = {
     parque: [],
     objHoraJugadoSorteo: "",
     objHoraProximoSorteo: "",
-    primerSorteo: false,
     esPrimerSorteo: true
 };
 

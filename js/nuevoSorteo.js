@@ -3,14 +3,12 @@ let objHoraJuegoSorteo;
 
 
 document.getElementById('nuevoSorteo').onclick = function() {
-//	let objHoraJuegoSorteo = new Date();
 
 	if (objPartida.iniciada){
 
 		if (objPartida.parque.length > 1) {
 
-			//objPartida.objHoraJuegoSorteo = new Date();
-			//funcion que devolvera si puede ha pasado una hora o no para poder jugar de nuevo.
+			//funcion que devolvera true o false para evaluar si puede jugar
 			let puedeJugar = comprobarHora();
 
 			if (puedeJugar){
@@ -35,12 +33,12 @@ document.getElementById('nuevoSorteo').onclick = function() {
 						if ( nroAJugar === nroPremiado ){
 
 							premio();
-							success( txtPremio = "¡Enhorabuena!. Acabas de ganar 10.000$");
+							success( txtPremio = "¡Enhorabuena!. Acabas de ganar 10.000$. Vuelve a probar tu suerte en 1 hora.");
 
 						} else if ( nroAJugar === nroTerremoto ) {
 
 							terremoto();
-							error( txtError = "Ohhhh El numero elegido ha provocado un terremoto que te ha destruido dos edificios....");
+							error( txtError = "Ohhhh El número elegido ha provocado un terremoto que ha destruido dos edificios....Prueba otra vez suerte en 1 hora.");
 
 						} else {
 
@@ -53,19 +51,20 @@ document.getElementById('nuevoSorteo').onclick = function() {
 
 					} else if (isNaN(nroAJugar) ){
 
-							error( txtError = "Debe de introducir un número, no es valido otro caracter." );
+							error( txtError = "Debe de introducir un número, no es valido otro caracter.. Prueba más suerte en 1 hora." );
 
 						} else {
 					
-							error( txtError = 'Debe introducir un número entre 1 y 5' );
+							error( txtError = 'Debe introducir un número entre 1 y 5. Prueba más suerte en 1 hora.' );
 						}
 
 				} else {
 
-					error( txtError = 'Valor introducido incorrecto, vuelva intentarlo...' );
+					error( txtError = 'Valor introducido incorrecto, vuelva intentarlo...Prueba más suerte en 1 hora.' );
 
 				}
 
+				//Una vez que se han completado las instrucciones del sorteo se llama a esta funciona para guardar la hora a la que ha jugado y la hora a la que puede volver a jugar.
 				//Funcion para actualizar las horas nuevas del proximo juego.
 				reiniciarHorasProximoSorteo();
 
@@ -92,77 +91,38 @@ document.getElementById('nuevoSorteo').onclick = function() {
 }
 
 
-//Funcion que comprueba si se ha jugado alguna vez y si no se ha jugado se permite jugar o si se ha jugado se comprueba si ha pasado una hora
+//Funcion que comprueba si se ha jugado alguna vez y si no se ha jugado se permite jugar o si se ha jugado se comprueba la hora actual con la hora del proximo sorteo, si ha pasado una hora se retorna true y si no ha pasado una hora se retorna false
 function comprobarHora(){
 
 	let puedeJugar;
 
-	if(objPartida.esPrimerSorteo){
+	if (objPartida.esPrimerSorteo) {
+
 		puedeJugar = true;
 		objPartida.esPrimerSorteo = false;
 		return puedeJugar;
-	}
 
-	if ( new Date()  > objPartida.objHoraProximoSorteo){
+	} else if ( new Date()  > objPartida.objHoraProximoSorteo) {
+
 		puedeJugar = true;
 		return puedeJugar;
-	}else {
+
+	} else {
+
 		puedeJugar  = false;
 		return puedeJugar;
 	}
-
-/*
-	let juegoAhora = new Date();
-	if(objPartida.objHoraProximoSorteo === "") {
-		reiniciarHorasProximoSorteo(juegoAhora);
-		objPartida.primerSorteo = true;
-	}
-	// let horaJugada = objPartida.objHoraJugadoSorteo.getHours()+objPartida.objHoraJugadoSorteo.getMinutes();
-	// let proximaHora = objPartida.objHoraProximoSorteo.getHours()+objPartida.objHoraProximoSorteo.getMinutes();
-	//if ( horaJugada > proximaHora || objPartida.objHoraProximoSorteo === "" ) {
-	if ( juegoAhora > objPartida.objHoraProximoSorteo || objPartida.primerSorteo ) {
-	//if (horaClick < objPartida.objHoraProximoSorteo) {
-		objPartida.primerSorteo = false;
-		puedeJugar = true;
-		return puedeJugar;
-	}else{
-		puedeJugar = false;
-		return puedeJugar;
-	}
-*/
-
-	// if (objPartida.objHoraJugarSorteo.length == 0 || objPartida.objHoraJugarSorteo === "" || objPartida.objHoraJugarSorteo === null){
-
-	// 	objPartida.objHoraJugarSorteo = new Date();
-	// 	let tmp = new Date();
-	// 	objPartida.objHoraProximoSorteo = new Date(tmp.setHours( tmp.getHours() + .01) );
-	// 	puedeJugar = true;
-	// 	return puedeJugar;
-
-	// } else if (objHoraClick < objPartida.objHoraProximoSorteo){
-
-	// 	puedeJugar = false;
-	// 	return puedeJugar;
-
-	// }
 }
 
 
-///Asignamos nueva hora a la varible que guarda la hora en que se ha jugado
+///****AHORA MISMO SE VALIDA EN 5MIN, PARA VALIDARLO EN UNA HORA SE TIENE QUE DESCOMENTAR LA LINEA 124 Y COMENTAR LA LINEA 125**///
+// Asignamos nueva hora a la varible que guarda la hora en que se ha jugado, y se asigna la hora para el proximo sorteo
+// Esto se hace en el Objeto Partida
 function reiniciarHorasProximoSorteo(){
 	objPartida.objHoraJugadoSorteo = new Date();;
 	let tmp = new Date();
 	//objPartida.objHoraProximoSorteo = new Date(tmp.setHours( tmp.getHours() + 1) );
-	objPartida.objHoraProximoSorteo = new Date(tmp.setMinutes( tmp.getMinutes() + 2) );
-}
-
-function error(txt){
-	msg('error', txt);
-}
-
-
-function success(txt) {
-	msg('success', txt);
+	objPartida.objHoraProximoSorteo = new Date(tmp.setMinutes( tmp.getMinutes() + 1) );
 }
 
 
@@ -176,8 +136,7 @@ function premio(){
 
 function terremoto(){
 
-	let celdasEdificadas = [], celdasDestruir = [];
-	alert("hola terremoto");
+	//alert("hola terremoto");
 	const celdasMapa = document.querySelectorAll('.celda');
 
 	let celdas = document.querySelectorAll('.celda');
@@ -193,4 +152,14 @@ function terremoto(){
 
 	objPartida.parque.shift();
 	objPartida.parque.shift();
+}
+
+
+function error(txt){
+	msg('error', txt);
+}
+
+
+function success(txt) {
+	msg('success', txt);
 }

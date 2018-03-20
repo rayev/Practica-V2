@@ -1,5 +1,5 @@
 //sistema de alertas
-function msg(arg1, arg2, arg3 = 3){
+function msg(arg1, arg2, arg3 = 4){
 
     var alerta = document.getElementById('alerta');
 
