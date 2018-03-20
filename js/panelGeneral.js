@@ -1,12 +1,14 @@
 var objPartida = {
     iniciada: false,
-    saldo: 13000,
+    saldo: 3000,
     recaudacion: 0,
     visitantes: 0,
     detalles: {},
     parque: [],
-    objHoraJugarSorteo: "",
-    objHoraProximoSorteo: ""
+    objHoraJugadoSorteo: "",
+    objHoraProximoSorteo: "",
+    primerSorteo: false,
+    esPrimerSorteo: true
 };
 
 
@@ -57,6 +59,7 @@ for (let cadaCelda of celdas) {
                 edificios.onload = function() {
 
                     edificios.document.getElementById('numeroCelda').textContent = cadaCelda.dataset.celda;
+                    edificios.document.getElementById('saldoActual').textContent = objPartida.saldo + " $";
                 }
 
             } else {

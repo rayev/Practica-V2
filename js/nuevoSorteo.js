@@ -1,16 +1,16 @@
 let txtError = "", txtPremio = "", nroPremiado, nroTerremoto, nroAJugar;
-// let fechaJugadaUltimoSorteo;
-// let horaInicio, horaFin;
-// let haJugado = false;
-let puedeJugar;
+let objHoraJuegoSorteo;
 
 
-document.getElementById('nuevoSorteo').onclick = function(e) {
+document.getElementById('nuevoSorteo').onclick = function() {
+//	let objHoraJuegoSorteo = new Date();
 
 	if (objPartida.iniciada){
 
 		if (objPartida.parque.length > 1) {
 
+			//objPartida.objHoraJuegoSorteo = new Date();
+			//funcion que devolvera si puede ha pasado una hora o no para poder jugar de nuevo.
 			let puedeJugar = comprobarHora();
 
 			if (puedeJugar){
@@ -66,14 +66,13 @@ document.getElementById('nuevoSorteo').onclick = function(e) {
 
 				}
 
-				///Asignamos nuevos valores a las horas de juego.
-				objPartida.objHoraJugarSorteo = new Date();
-				let tmp = new Date();
-				objPartida.objHoraProximoSorteo = new Date(tmp.setHours( tmp.getHours() + 1) );
+				//Funcion para actualizar las horas nuevas del proximo juego.
+				reiniciarHorasProximoSorteo();
+
 
 			} else {
 
-				error( txtError = "Debes esperar una hora entre un sorteo y otro.");
+				error( txtError = "Debes esperar una hora entre un sorteo y otro. Podras participar de nuevo a partir las: " + objPartida.objHoraProximoSorteo.toLocaleTimeString() );
 
 			}
 
@@ -93,166 +92,105 @@ document.getElementById('nuevoSorteo').onclick = function(e) {
 }
 
 
+//Funcion que comprueba si se ha jugado alguna vez y si no se ha jugado se permite jugar o si se ha jugado se comprueba si ha pasado una hora
 function comprobarHora(){
 
 	let puedeJugar;
 
-	if (objPartida.objHoraJugarSorteo.length == 0 || objPartida.objHoraJugarSorteo === "" || objPartida.objHoraJugarSorteo === null){
+	if(objPartida.esPrimerSorteo){
+		puedeJugar = true;
+		objPartida.esPrimerSorteo = false;
+		return puedeJugar;
+	}
 
-		objPartida.objHoraJugarSorteo = new Date();
-		let tmp = new Date();
-		objPartida.objHoraProximoSorteo = new Date(tmp.setHours( tmp.getHours() + 1) );
+	if ( new Date()  > objPartida.objHoraProximoSorteo){
 		puedeJugar = true;
 		return puedeJugar;
+	}else {
+		puedeJugar  = false;
+		return puedeJugar;
+	}
 
-	} else if (objPartida.objHoraJugarSorteo < objPartida.objHoraProximoSorteo){
-
+/*
+	let juegoAhora = new Date();
+	if(objPartida.objHoraProximoSorteo === "") {
+		reiniciarHorasProximoSorteo(juegoAhora);
+		objPartida.primerSorteo = true;
+	}
+	// let horaJugada = objPartida.objHoraJugadoSorteo.getHours()+objPartida.objHoraJugadoSorteo.getMinutes();
+	// let proximaHora = objPartida.objHoraProximoSorteo.getHours()+objPartida.objHoraProximoSorteo.getMinutes();
+	//if ( horaJugada > proximaHora || objPartida.objHoraProximoSorteo === "" ) {
+	if ( juegoAhora > objPartida.objHoraProximoSorteo || objPartida.primerSorteo ) {
+	//if (horaClick < objPartida.objHoraProximoSorteo) {
+		objPartida.primerSorteo = false;
+		puedeJugar = true;
+		return puedeJugar;
+	}else{
 		puedeJugar = false;
 		return puedeJugar;
-
 	}
+*/
+
+	// if (objPartida.objHoraJugarSorteo.length == 0 || objPartida.objHoraJugarSorteo === "" || objPartida.objHoraJugarSorteo === null){
+
+	// 	objPartida.objHoraJugarSorteo = new Date();
+	// 	let tmp = new Date();
+	// 	objPartida.objHoraProximoSorteo = new Date(tmp.setHours( tmp.getHours() + .01) );
+	// 	puedeJugar = true;
+	// 	return puedeJugar;
+
+	// } else if (objHoraClick < objPartida.objHoraProximoSorteo){
+
+	// 	puedeJugar = false;
+	// 	return puedeJugar;
+
+	// }
 }
 
+
+///Asignamos nueva hora a la varible que guarda la hora en que se ha jugado
+function reiniciarHorasProximoSorteo(){
+	objPartida.objHoraJugadoSorteo = new Date();;
+	let tmp = new Date();
+	//objPartida.objHoraProximoSorteo = new Date(tmp.setHours( tmp.getHours() + 1) );
+	objPartida.objHoraProximoSorteo = new Date(tmp.setMinutes( tmp.getMinutes() + 2) );
+}
 
 function error(txt){
 	msg('error', txt);
 }
 
+
 function success(txt) {
 	msg('success', txt);
 }
 
+
 function premio(){
+
 	// alert("hola premio");
 	objPartida.saldo = (10000 + objPartida.saldo);
 	document.getElementById('contadorSaldoActual').textContent = objPartida.saldo + "$";
-
 }
+
 
 function terremoto(){
 
 	let celdasEdificadas = [], celdasDestruir = [];
 	alert("hola terremoto");
 	const celdasMapa = document.querySelectorAll('.celda');
-	console.log(celdasMapa);
-
-	// for (let i of celdasMapa) {
-
-	// 	if (i.dataset.edificio !== "vacia"){
-	// 		celdasEdificadas.push(i.dataset.celda);
-	// 	}
-
-	// 	console.log(i.dataset.edificio);
-	// 	console.log(i);
-	// }
-
-
-
-
-
-	console.log(objPartida.parque);
-	//if (celdasEdificadas.length === 2){
-	//if (objPartida.parque.length === 2){
-		//destruirCasas(objPartida.parque);
-		//objPartida.parque.shift();
-
-		// let edificio1 = 0;
-		// let edificio2 = 1;
-		// destruirEdificios(edificio1, edificio2);
-
-
-		let celdas = document.querySelectorAll('.celda');
-
-		for (let celda of celdas) {
-
-			for (var x = 0; x < 2; x++) {
-				if (objPartida.parque[x]._celda === celda.dataset.celda) {
-					celda.dataset.edificio =  "vacia";
-				}
-			}
-		}		
-	
-		//objPartida.parque[0].destruir(0);
-		//objPartida.parque[0].destruir(1);
-		objPartida.parque.shift();
-		objPartida.parque.shift();
-	// }else{
-	// 	celdasDestruir = calcularCeldas(objPartida.parque.length-1);
-	// 	destruirEdificios(celdasDestruir);
-	// }	
-
-	console.log(celdasEdificadas);
-
-}
-
-
-function calcularCeldas(nroMaximo) {
-	let celdasADestruir = [];
-	let celda1, celda2;
-
-	celda1 = Math.floor(Math.random() * nroMaximo) + 1;
-
-	do {
-
-		celda2 = Math.floor(Math.random() * nroMaximo) + 1;
-
-	} while (celda1 === celda2);
-
-	celda1  = (celda1 < 10) ? "0"+celda1.toString() : celda1.toString()
-	celda2  = (celda2 < 10) ? "0"+celda2.toString() : celda2.toString()
-	celdasADestruir.push(celda1);
-	celdasADestruir.push(celda2);
-	return celdasADestruir;
-
-}
-
-
-function destruirEdificios(nroCeldas) {
-	//console.log(nroCeldas);
 
 	let celdas = document.querySelectorAll('.celda');
 
 	for (let celda of celdas) {
-		console.log(celda);
-		// for (var i = 0; i < objPartida.parque.length; i++) {
-		// 	if(objPartida.parque[i]._celda === nroCeldas[0] || objPartida.parque[i]._celda === nroCeldas[1]){
-		// 		celda.dataset.edificio = "vacia";
-		// 		objPartida.parque.shift[objPartida.parque[i].celda, 1];
-		// 	}
-		// }
-		for (var x = 0; x < objPartida.parque.length; x++) {
-			for (let y = 0; y < nroCeldas.length; y++){
-				if(objPartida.parque[x]._celda === nroCeldas[y].toString()){
-					celda.dataset.edificio =  "vacia";
-					objPartida.parque.shift(nroCeldas[y],1);
-				}
-			}
+
+		for (var x = 0; x < 2; x++) {
 			if (objPartida.parque[x]._celda === celda.dataset.celda) {
 				celda.dataset.edificio =  "vacia";
 			}
 		}
-	}
-	// objPartida.parque.shift(nroCeldas[0],1);
-	// objPartida.parque.shift(nroCeldas[1],1);
-	//let celdas = document.querySelectorAll('.celda');
+	}		
 
-	// for (let i of celdas) {
-
-	// 	for (var j = 0; j < nroCeldas.length; j++) {
-
-	// 		if(nroCeldas[j] === i.dataset.celda){
-	// 			i.dataset.edificio = "vacia";
-	// 		}
-	// 	}
-	// }
-	// for (let i of objPartida.parque){
-	// 	for (var j = 0; j < nroCeldas.length; j++) {
-	// 		if(nroCeldas[j]._celda === i._celda){
-	// 			i._celda = "vacia";
-	// 		}
-	// 	}
-	// }
-
-
-
+	objPartida.parque.shift();
+	objPartida.parque.shift();
 }
