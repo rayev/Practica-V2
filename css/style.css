@@ -366,7 +366,9 @@ button:hover,.panel a:hover{
     font-weight: 300;
     margin: 10px auto;
     padding: 12px 0;
-    width: 90%;
+    /*width: 90%;*/
+    width: calc(100% - 40px);
+
 }
 
 .panel a {
